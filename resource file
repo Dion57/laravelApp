@@ -1,0 +1,36 @@
+
+
+
+To create database inside the EC2 instance:
+	mysql -h finalplan.ctw3c0sw8tab.eu-west-1.rds.amazonaws.com -P 3306 -u admin -p
+	 
+domain name
+	dion**.com.ng
+ip-address
+	63.34.**.**
+Repository
+	https://bitbucket.org/dion57/perfplan/src/main/
+
+database endpoint
+	finalplan.ctw3c0sw8tab.eu-west-1.rds.amazonaws.com
+master user
+	admin
+password
+	happyworld123
+	
+
+<VirtualHost *:80>
+	ServerAdmin deonnichole57@gmail.com
+	ServerName dion**.com.ng
+	ServerAlias www.dion**.com.ng
+	DocumentRoot /var/www/finalplan/public
+	
+	Errorlog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+	
+	<Directory /var/www/finalplan>
+		Require all granted
+		AllowOverride All
+		Options Indexes Multiviews FollowSymLinks
+	</Directory>
+</VirtualHost>
