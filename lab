@@ -1,0 +1,131 @@
+cd into where the laravel app is located
+	$ cd ~/Desktop/laravel-realworld-example-app-master
+	$ git init
+create a username and email where alerts should be sent
+	$ git config --global user.name "perfectlaravel"
+	git config --global user.email "deonnichole57@gmail.com"
+	
+get into the repository of your bitbucket and add the laravel app
+	$ https://bitbucket.org/dion57/perfplan/src/main/
+	git add . 
+	git commit -m "first push"
+	git checkout -B main 
+	git push -u -f origin main
+
+ssh into your Virtual machine instance
+	cd ~/directory with PEM file key.
+	$ ssh -i keypair.pem ubuntu@ip_address 
+	
+and carry out some updates while installing apache2.
+	sudo apt update &&
+        sudo apt upgrade &&
+        sudo apt install apache2 &&
+        sudo apt install software-properties-common &&
+        sudo ass-apt-repository ppa:ondrej/php &&
+        sudo apt install composer &&
+        sudo apt install python3-certbot-apache&&
+        sudo apt install php7.4-cli php7.4-fpm php7.4-mysql php7.4-zip php7.4-gd php7.4-curl php7.4-bcmath php7.4-ctype php7.4-fileinfo php7.4-json php7.4-mbstring php7.4-openssl php7.4-pdo php7.4-tokenizer php7.4-xml php7.4-xmlwriter
+
+OR
+	$ cd 
+	*Confirm this by browsing the elastic Ip address. It should show the ubuntu apache page.
+	
+	
+Create a new directory and cd into it
+	$ sudo mkdir finalplan
+	$ cd finalplan
+
+make your disk writeable by running the following command
+	$ sudo chown -R ubuntu:ubuntu .
+	$ sudo chmod 775 .
+	$ ls -la
+
+pull the laravel file from your bitbuckect repo
+	$ git init
+	$ git pull https://bitbucket.org/dion57/perfplan/src/main/
+intput user name and password of bitbucket
+confirm with;
+	$ ls -la
+
+Create an env file
+	$ nano .env
+	copy the contents of your modified env congigurations into the file.
+	save and exit.
+
+setup composer
+	On your browser, go to "getcomposer.org"
+	under downloads, copy the script and run in your terminal.
+	$ php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php -r "if (hash_file('sha384', 'composer-setup.php') === 'e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+php composer-setup.php
+php -r "unlink('composer-setup.php');"
+
+OR
+
+	$ cd ~
+	$ curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php
+HASH=`curl -sS https://composer.github.io/installer.sig`
+echo $HASH
+	$ php -r "if (hash_file('SHA384', '/tmp/composer-setup.php') === '$HASH') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+
+	$ sudo php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
+	$ composer
+	
+Generate key
+	$ php artisan key:generate
+	confirm this by checking the key in the .env file
+	$ php artisan migrate
+This will give a timout. Go to your aws portal and create a security group to allow inbound traffic from mysql with source being the ip_address of the EC2 machine.
+
+When this works, set up Apache2
+	$ cd /etc/apache2
+	$ ls sites-enabled/
+	$ sudo a2dissite 000-default.conf
+	$ sudo systemctl reload apache2
+	$ cd sites-available/
+	$ sudo rm -f 000-default.conf && sudo rm -f default-ssl.conf 
+	$ sudo nano finalplan.conf
+		<VirtualHost *:80>
+			ServerAdmin deonnichole57@gmail.com
+			ServerName dionnaks.com.ng
+			ServerAlias www.dionnaks.com.ng
+			DocumentRoot /var/www/finalplan/public
+	
+			Errorlog ${APACHE_LOG_DIR}/error.log
+			CustomLog ${APACHE_LOG_DIR}/access.log combined
+	
+		<Directory /var/www/finalplan>
+			Require all granted
+			AllowOverride All
+			Options Indexes Multiviews FollowSymLinks
+		</Directory>
+		</VirtualHost>
+	$ ls
+	$ sudo a2ensite finalplan.conf
+	$ sudo systemctl reload apache2.service
+	$ cd ./..
+	$ ls sites-enabled/
+	$ sudo a2enmod php7.4
+	$ sudo systemctl restart apache2.service
+	$ cd ~
+	$ cd /var/www/finalplan/
+	
+setup Storage
+	$ cd storage
+	ensure that the session folder is created within the framework folder
+	$ls 
+	$ cd ..
+	$ sudo chown -R www-data storage
+	$ sudo chown -R www-data storage/framework/
+	$ sudo chmod g+w -R storage
+	$ sudo chmod g+w -R storage/framework/
+	$ sudo chmod g+w -R storage/framework/sessions/
+	$ sudo chmod g+w -R storage/logs
+	
+setup ssh
+	$ sudo certbot
+	$ sudo apt install -y certbot python3-certbot-apache
+	$ sudo certbot
+	$ sudo certbot --expand -d dionnaks.com.ng,www.dionnaks.com.ng
+	$ 
+	
